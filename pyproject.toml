@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "forgeguard"
+version = "1.0.0"
+description = "Autonomous AI Code Vulnerability Scanner, STRIDE Threat Modeler & AST-Verified Patch Engine"
+readme = "README.md"
+authors = [
+    { name = "SwarmForge Security Team", email = "security@swarmforge.ai" }
+]
+license = { text = "MIT" }
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Bug Tracking"
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "reportlab>=4.0.0"
+]
+
+[project.scripts]
+forgeguard = "forgeguard.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/karan5028ji/forgeguard"
+Documentation = "https://github.com/karan5028ji/forgeguard/tree/main/docs"
+Repository = "https://github.com/karan5028ji/forgeguard.git"
+"Bug Tracker" = "https://github.com/karan5028ji/forgeguard/issues"

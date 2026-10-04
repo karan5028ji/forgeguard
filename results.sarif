@@ -1,0 +1,417 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "ForgeGuard",
+          "version": "1.0.0",
+          "informationUri": "https://github.com/karan5028ji/forgeguard",
+          "rules": [
+            {
+              "id": "FG-SEC-004",
+              "name": "HardcodedCryptographicSecretorAPIToken",
+              "shortDescription": {
+                "text": "Hardcoded Cryptographic Secret or API Token"
+              },
+              "fullDescription": {
+                "text": "Storing API tokens, private keys, database passwords, or JWT secrets directly in source code risks exposure via version control."
+              },
+              "help": {
+                "text": "Remediation: Load sensitive credentials exclusively from environment variables or secure secret managers (e.g., `os.environ.get('API_SECRET')`).\nCWE: CWE-798 (A07:2021-Identification and Authentication Failures)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "CWE-798",
+                  "A07:2021-Identification and Authentication Failures",
+                  "HIGH"
+                ],
+                "precision": "high",
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "FG-SEC-001",
+              "name": "SQLInjectionviaUnsanitizedFormattedQuery",
+              "shortDescription": {
+                "text": "SQL Injection via Unsanitized Formatted Query"
+              },
+              "fullDescription": {
+                "text": "Dynamic construction of SQL query strings using string formatting or concatenation enables unauthorized database access or modification."
+              },
+              "help": {
+                "text": "Remediation: Use parameterized queries with prepared statements (e.g. `cursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))`) instead of string interpolation.\nCWE: CWE-89 (A03:2021-Injection)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "CWE-89",
+                  "A03:2021-Injection",
+                  "CRITICAL"
+                ],
+                "precision": "high",
+                "security-severity": "9.8"
+              }
+            },
+            {
+              "id": "FG-SEC-002",
+              "name": "OSCommandInjectionviaShellExecution",
+              "shortDescription": {
+                "text": "OS Command Injection via Shell Execution"
+              },
+              "fullDescription": {
+                "text": "Executing system commands via `os.system` or `subprocess` with `shell=True` allows attackers to append arbitrary shell operators and execute unauthorized code."
+              },
+              "help": {
+                "text": "Remediation: Pass arguments as an explicit sequence/list to `subprocess.run([...], shell=False)` and validate inputs with strict whitelists.\nCWE: CWE-78 (A03:2021-Injection)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "CWE-78",
+                  "A03:2021-Injection",
+                  "CRITICAL"
+                ],
+                "precision": "high",
+                "security-severity": "9.8"
+              }
+            },
+            {
+              "id": "FG-SEC-003",
+              "name": "InsecureObjectDeserialization",
+              "shortDescription": {
+                "text": "Insecure Object Deserialization"
+              },
+              "fullDescription": {
+                "text": "Unpickling or unsafe YAML loading from untrusted sources enables arbitrary remote code execution via custom `__reduce__` exploit payloads."
+              },
+              "help": {
+                "text": "Remediation: Use safe serialization formats such as JSON (`json.loads`) or `yaml.safe_load`. Avoid `pickle.loads` on unauthenticated data.\nCWE: CWE-502 (A08:2021-Software and Data Integrity Failures)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "CWE-502",
+                  "A08:2021-Software and Data Integrity Failures",
+                  "CRITICAL"
+                ],
+                "precision": "high",
+                "security-severity": "9.8"
+              }
+            },
+            {
+              "id": "FG-SEC-006",
+              "name": "WeakCryptographicHashAlgorithm",
+              "shortDescription": {
+                "text": "Weak Cryptographic Hash Algorithm"
+              },
+              "fullDescription": {
+                "text": "Using MD5 or SHA1 for security hashing or password verification is vulnerable to collision attacks and rainbow table precomputation."
+              },
+              "help": {
+                "text": "Remediation: Upgrade to SHA-256 (`hashlib.sha256`), SHA-3, or password-specific key derivation functions such as Argon2id or bcrypt.\nCWE: CWE-327 (A02:2021-Cryptographic Failures)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "CWE-327",
+                  "A02:2021-Cryptographic Failures",
+                  "MEDIUM"
+                ],
+                "precision": "high",
+                "security-severity": "5.9"
+              }
+            },
+            {
+              "id": "FG-SEC-007",
+              "name": "CryptographicallyInsecurePseudorandomNumberGenerator",
+              "shortDescription": {
+                "text": "Cryptographically Insecure Pseudorandom Number Generator"
+              },
+              "fullDescription": {
+                "text": "The standard `random` module uses the Mersenne Twister algorithm, which is completely predictable after observing 624 outputs and unsafe for security tokens."
+              },
+              "help": {
+                "text": "Remediation: Use Python's `secrets` module (`secrets.token_hex`, `secrets.token_urlsafe`) for generating secure tokens, salts, and session IDs.\nCWE: CWE-338 (A02:2021-Cryptographic Failures)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "CWE-338",
+                  "A02:2021-Cryptographic Failures",
+                  "MEDIUM"
+                ],
+                "precision": "high",
+                "security-severity": "5.3"
+              }
+            },
+            {
+              "id": "FG-SEC-008",
+              "name": "DynamicCodeEvaluationviaeval/exec",
+              "shortDescription": {
+                "text": "Dynamic Code Evaluation via eval/exec"
+              },
+              "fullDescription": {
+                "text": "Using `eval()`, `exec()`, or `compile()` with user-influenced expressions allows arbitrary code execution in the running process context."
+              },
+              "help": {
+                "text": "Remediation: Refactor to use safe dispatch mappings (dictionaries), `ast.literal_eval` for literals, or domain-specific parsers.\nCWE: CWE-95 (A03:2021-Injection)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "CWE-95",
+                  "A03:2021-Injection",
+                  "CRITICAL"
+                ],
+                "precision": "high",
+                "security-severity": "9.8"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "FG-SEC-004",
+          "level": "error",
+          "message": {
+            "text": "Hardcoded Cryptographic Secret or API Token: Hardcoded API secret or credential variable assignment"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/vulnerable_app/app.py"
+                },
+                "region": {
+                  "startLine": 14,
+                  "startColumn": 1,
+                  "snippet": {
+                    "text": "OPENAI_API_KEY = \"sk-live-098234098234098234098234098234098234\""
+                  }
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "Apply automated ForgeGuard AST patch for CWE-798"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "FG-SEC-001",
+          "level": "error",
+          "message": {
+            "text": "SQL Injection via Unsanitized Formatted Query: SQL query constructed using tainted variable `query` (f-string)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/vulnerable_app/app.py"
+                },
+                "region": {
+                  "startLine": 21,
+                  "startColumn": 5,
+                  "snippet": {
+                    "text": "cursor.execute(query)"
+                  }
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "Apply automated ForgeGuard AST patch for CWE-89"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "FG-SEC-002",
+          "level": "error",
+          "message": {
+            "text": "OS Command Injection via Shell Execution: os.system or os.popen invoked with dynamic input."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/vulnerable_app/app.py"
+                },
+                "region": {
+                  "startLine": 26,
+                  "startColumn": 5,
+                  "snippet": {
+                    "text": "os.system(f\"ping -c 1 {hostname}\")"
+                  }
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "Apply automated ForgeGuard AST patch for CWE-78"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "FG-SEC-003",
+          "level": "error",
+          "message": {
+            "text": "Insecure Object Deserialization: pickle.load/loads deserializes untrusted binary data."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/vulnerable_app/app.py"
+                },
+                "region": {
+                  "startLine": 30,
+                  "startColumn": 20,
+                  "snippet": {
+                    "text": "session_data = pickle.loads(session_bytes)"
+                  }
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "Apply automated ForgeGuard AST patch for CWE-502"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "FG-SEC-006",
+          "level": "warning",
+          "message": {
+            "text": "Weak Cryptographic Hash Algorithm: hashlib.md5 is cryptographically weak for secure operations."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/vulnerable_app/app.py"
+                },
+                "region": {
+                  "startLine": 35,
+                  "startColumn": 12,
+                  "snippet": {
+                    "text": "return hashlib.md5(password.encode()).hexdigest()"
+                  }
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "Apply automated ForgeGuard AST patch for CWE-327"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "FG-SEC-007",
+          "level": "warning",
+          "message": {
+            "text": "Cryptographically Insecure Pseudorandom Number Generator: random.randint is a predictable PRNG unsafe for security tokens."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/vulnerable_app/app.py"
+                },
+                "region": {
+                  "startLine": 39,
+                  "startColumn": 17,
+                  "snippet": {
+                    "text": "token_int = random.randint(100000, 999999)"
+                  }
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "Apply automated ForgeGuard AST patch for CWE-338"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "FG-SEC-008",
+          "level": "error",
+          "message": {
+            "text": "Dynamic Code Evaluation via eval/exec: Using `eval()`, `exec()`, or `compile()` with user-influenced expressions allows arbitrary code execution in the running process context."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "examples/vulnerable_app/app.py"
+                },
+                "region": {
+                  "startLine": 44,
+                  "startColumn": 12,
+                  "snippet": {
+                    "text": "return eval(user_expression)"
+                  }
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "Apply automated ForgeGuard AST patch for CWE-95"
+              }
+            }
+          ]
+        }
+      ],
+      "invocations": [
+        {
+          "executionSuccessful": true,
+          "toolExecutionNotifications": []
+        }
+      ]
+    }
+  ]
+}

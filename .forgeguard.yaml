@@ -1,0 +1,26 @@
+# ForgeGuard Enterprise Project Configuration
+version: "1.0"
+
+policy:
+  fail_on_severity: "high" # critical | high | medium | low
+  enable_ast_verification: true
+  backup_dir: ".forgeguard_backups"
+
+rules:
+  FG-SEC-001: { enabled: true, override_severity: "CRITICAL" } # SQL Injection
+  FG-SEC-002: { enabled: true, override_severity: "CRITICAL" } # OS Command Injection
+  FG-SEC-003: { enabled: true, override_severity: "CRITICAL" } # Deserialization
+  FG-SEC-004: { enabled: true, override_severity: "HIGH" }     # Hardcoded Secrets
+  FG-SEC-005: { enabled: true, override_severity: "HIGH" }     # Path Traversal
+  FG-SEC-006: { enabled: true, override_severity: "MEDIUM" }   # Weak Hash
+  FG-SEC-007: { enabled: true, override_severity: "MEDIUM" }   # Insecure PRNG
+  FG-SEC-008: { enabled: true, override_severity: "CRITICAL" } # Dynamic Eval
+  FG-SEC-009: { enabled: true, override_severity: "LOW" }      # Permissive CORS
+
+exclude_paths:
+  - ".git"
+  - ".venv"
+  - "node_modules"
+  - "dist"
+  - "build"
+  - ".forgeguard_backups"

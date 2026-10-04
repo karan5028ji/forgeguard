@@ -1,0 +1,9 @@
+# ForgeGuard Pre-Commit Hook Definition
+- id: forgeguard
+  name: ForgeGuard SAST Security Scanner
+  description: Autonomous AI static code vulnerability auditor & pre-commit safety gate
+  entry: python -m forgeguard.cli scan
+  language: python
+  types: [python]
+  pass_filenames: true
+  args: ["--fail-on", "high"]

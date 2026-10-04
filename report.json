@@ -1,0 +1,289 @@
+{
+  "project_name": "vulnerable_app",
+  "scan_timestamp": "2026-10-04 14:47:16 UTC",
+  "summary": {
+    "total_files_scanned": 1,
+    "total_lines_scanned": 47,
+    "findings_count": 7,
+    "critical_count": 4,
+    "high_count": 1,
+    "medium_count": 2,
+    "low_count": 0,
+    "info_count": 0,
+    "mean_cvss_score": 8.3,
+    "security_grade": "F",
+    "scan_duration_ms": 5.26
+  },
+  "findings": [
+    {
+      "id": "FG-001",
+      "rule_id": "FG-SEC-004",
+      "title": "Hardcoded Cryptographic Secret or API Token",
+      "severity": "HIGH",
+      "cwe": {
+        "cwe_id": "CWE-798",
+        "name": "Use of Hard-coded Credentials",
+        "owasp_category": "A07:2021-Identification and Authentication Failures",
+        "description": "Storing API tokens, private keys, database passwords, or JWT secrets directly in source code risks exposure via version control."
+      },
+      "cvss_score": 7.5,
+      "file_path": "examples/vulnerable_app\\app.py",
+      "line_number": 14,
+      "column": 0,
+      "code_snippet": "OPENAI_API_KEY = \"sk-live-098234098234098234098234098234098234\"",
+      "description": "Hardcoded API secret or credential variable assignment",
+      "remediation": "Load sensitive credentials exclusively from environment variables or secure secret managers (e.g., `os.environ.get('API_SECRET')`).",
+      "confidence": "HIGH",
+      "verified": true
+    },
+    {
+      "id": "FG-002",
+      "rule_id": "FG-SEC-001",
+      "title": "SQL Injection via Unsanitized Formatted Query",
+      "severity": "CRITICAL",
+      "cwe": {
+        "cwe_id": "CWE-89",
+        "name": "Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')",
+        "owasp_category": "A03:2021-Injection",
+        "description": "Dynamic construction of SQL query strings using string formatting or concatenation enables unauthorized database access or modification."
+      },
+      "cvss_score": 9.8,
+      "file_path": "examples/vulnerable_app\\app.py",
+      "line_number": 21,
+      "column": 4,
+      "code_snippet": "cursor.execute(query)",
+      "description": "SQL query constructed using tainted variable `query` (f-string).",
+      "remediation": "Use parameterized queries with prepared statements (e.g. `cursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))`) instead of string interpolation.",
+      "confidence": "HIGH",
+      "verified": true
+    },
+    {
+      "id": "FG-003",
+      "rule_id": "FG-SEC-002",
+      "title": "OS Command Injection via Shell Execution",
+      "severity": "CRITICAL",
+      "cwe": {
+        "cwe_id": "CWE-78",
+        "name": "Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')",
+        "owasp_category": "A03:2021-Injection",
+        "description": "Executing system commands via `os.system` or `subprocess` with `shell=True` allows attackers to append arbitrary shell operators and execute unauthorized code."
+      },
+      "cvss_score": 9.8,
+      "file_path": "examples/vulnerable_app\\app.py",
+      "line_number": 26,
+      "column": 4,
+      "code_snippet": "os.system(f\"ping -c 1 {hostname}\")",
+      "description": "os.system or os.popen invoked with dynamic input.",
+      "remediation": "Pass arguments as an explicit sequence/list to `subprocess.run([...], shell=False)` and validate inputs with strict whitelists.",
+      "confidence": "HIGH",
+      "verified": true
+    },
+    {
+      "id": "FG-004",
+      "rule_id": "FG-SEC-003",
+      "title": "Insecure Object Deserialization",
+      "severity": "CRITICAL",
+      "cwe": {
+        "cwe_id": "CWE-502",
+        "name": "Deserialization of Untrusted Data",
+        "owasp_category": "A08:2021-Software and Data Integrity Failures",
+        "description": "Unpickling or unsafe YAML loading from untrusted sources enables arbitrary remote code execution via custom `__reduce__` exploit payloads."
+      },
+      "cvss_score": 9.8,
+      "file_path": "examples/vulnerable_app\\app.py",
+      "line_number": 30,
+      "column": 19,
+      "code_snippet": "session_data = pickle.loads(session_bytes)",
+      "description": "pickle.load/loads deserializes untrusted binary data.",
+      "remediation": "Use safe serialization formats such as JSON (`json.loads`) or `yaml.safe_load`. Avoid `pickle.loads` on unauthenticated data.",
+      "confidence": "HIGH",
+      "verified": true
+    },
+    {
+      "id": "FG-005",
+      "rule_id": "FG-SEC-006",
+      "title": "Weak Cryptographic Hash Algorithm",
+      "severity": "MEDIUM",
+      "cwe": {
+        "cwe_id": "CWE-327",
+        "name": "Use of a Broken or Risky Cryptographic Algorithm",
+        "owasp_category": "A02:2021-Cryptographic Failures",
+        "description": "Using MD5 or SHA1 for security hashing or password verification is vulnerable to collision attacks and rainbow table precomputation."
+      },
+      "cvss_score": 5.9,
+      "file_path": "examples/vulnerable_app\\app.py",
+      "line_number": 35,
+      "column": 11,
+      "code_snippet": "return hashlib.md5(password.encode()).hexdigest()",
+      "description": "hashlib.md5 is cryptographically weak for secure operations.",
+      "remediation": "Upgrade to SHA-256 (`hashlib.sha256`), SHA-3, or password-specific key derivation functions such as Argon2id or bcrypt.",
+      "confidence": "HIGH",
+      "verified": true
+    },
+    {
+      "id": "FG-006",
+      "rule_id": "FG-SEC-007",
+      "title": "Cryptographically Insecure Pseudorandom Number Generator",
+      "severity": "MEDIUM",
+      "cwe": {
+        "cwe_id": "CWE-338",
+        "name": "Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)",
+        "owasp_category": "A02:2021-Cryptographic Failures",
+        "description": "The standard `random` module uses the Mersenne Twister algorithm, which is completely predictable after observing 624 outputs and unsafe for security tokens."
+      },
+      "cvss_score": 5.3,
+      "file_path": "examples/vulnerable_app\\app.py",
+      "line_number": 39,
+      "column": 16,
+      "code_snippet": "token_int = random.randint(100000, 999999)",
+      "description": "random.randint is a predictable PRNG unsafe for security tokens.",
+      "remediation": "Use Python's `secrets` module (`secrets.token_hex`, `secrets.token_urlsafe`) for generating secure tokens, salts, and session IDs.",
+      "confidence": "HIGH",
+      "verified": true
+    },
+    {
+      "id": "FG-007",
+      "rule_id": "FG-SEC-008",
+      "title": "Dynamic Code Evaluation via eval/exec",
+      "severity": "CRITICAL",
+      "cwe": {
+        "cwe_id": "CWE-95",
+        "name": "Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')",
+        "owasp_category": "A03:2021-Injection",
+        "description": "Using `eval()`, `exec()`, or `compile()` with user-influenced expressions allows arbitrary code execution in the running process context."
+      },
+      "cvss_score": 9.8,
+      "file_path": "examples/vulnerable_app\\app.py",
+      "line_number": 44,
+      "column": 11,
+      "code_snippet": "return eval(user_expression)",
+      "description": "Using `eval()`, `exec()`, or `compile()` with user-influenced expressions allows arbitrary code execution in the running process context.",
+      "remediation": "Refactor to use safe dispatch mappings (dictionaries), `ast.literal_eval` for literals, or domain-specific parsers.",
+      "confidence": "HIGH",
+      "verified": true
+    }
+  ],
+  "threat_model": [
+    {
+      "category": "Spoofing",
+      "threat": "Spoofing threat detected across 2 entry point(s). Impersonating an identity, user, or trusted service.",
+      "target_asset": "1 source files (examples/vulnerable_app\\app.py)",
+      "risk_level": "HIGH",
+      "mitigation_strategy": "Enforce strong authentication, cryptographically secure randomness, and externalized secrets."
+    },
+    {
+      "category": "Tampering",
+      "threat": "Tampering threat detected across 2 entry point(s). Unauthorized modification of database records, code, or memory.",
+      "target_asset": "1 source files (examples/vulnerable_app\\app.py)",
+      "risk_level": "CRITICAL",
+      "mitigation_strategy": "Use parameterized queries, immutable data structures, and safe serialization."
+    },
+    {
+      "category": "Repudiation",
+      "threat": "Repudiation threat detected across 2 entry point(s). Inability to prove that an actor performed a malicious transaction.",
+      "target_asset": "1 source files (examples/vulnerable_app\\app.py)",
+      "risk_level": "CRITICAL",
+      "mitigation_strategy": "Implement structured tamper-evident audit logging and trace IDs."
+    },
+    {
+      "category": "Information Disclosure",
+      "threat": "Information Disclosure threat detected across 1 entry point(s). Exposing confidential business data, tokens, or system files to unauthorized parties.",
+      "target_asset": "1 source files (examples/vulnerable_app\\app.py)",
+      "risk_level": "HIGH",
+      "mitigation_strategy": "Enforce strict path canonicalization, secret manager integration, and restrictive CORS."
+    },
+    {
+      "category": "Denial of Service",
+      "threat": "Denial of Service threat detected across 2 entry point(s). Degrading system availability or causing process crashes through malformed input.",
+      "target_asset": "1 source files (examples/vulnerable_app\\app.py)",
+      "risk_level": "CRITICAL",
+      "mitigation_strategy": "Implement request timeouts, rate limiting, and safe isolated evaluators."
+    },
+    {
+      "category": "Elevation of Privilege",
+      "threat": "Elevation of Privilege threat detected across 2 entry point(s). Gaining unauthorized root, administrator, or underlying OS shell permissions.",
+      "target_asset": "1 source files (examples/vulnerable_app\\app.py)",
+      "risk_level": "CRITICAL",
+      "mitigation_strategy": "Eliminate shell=True invocations, avoid dynamic eval, and run services in restricted containers."
+    }
+  ],
+  "patches": [
+    {
+      "vulnerability_id": "FG-001",
+      "file_path": "examples/vulnerable_app\\app.py",
+      "start_line": 14,
+      "end_line": 14,
+      "original_code": "OPENAI_API_KEY = \"sk-live-098234098234098234098234098234098234\"",
+      "patched_code": "OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', '')",
+      "unified_diff": "--- a/app.py\n+++ b/app.py\n@@ -1 +1 @@\n-OPENAI_API_KEY = \"sk-live-098234098234098234098234098234098234\"\n\n+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', '')\n",
+      "remediation_summary": "Automated remediation for Hardcoded Cryptographic Secret or API Token (CWE-798)",
+      "applied": false
+    },
+    {
+      "vulnerability_id": "FG-002",
+      "file_path": "examples/vulnerable_app\\app.py",
+      "start_line": 21,
+      "end_line": 21,
+      "original_code": "cursor.execute(query)",
+      "patched_code": "cursor.execute(query)",
+      "unified_diff": "",
+      "remediation_summary": "Automated remediation for SQL Injection via Unsanitized Formatted Query (CWE-89)",
+      "applied": false
+    },
+    {
+      "vulnerability_id": "FG-003",
+      "file_path": "examples/vulnerable_app\\app.py",
+      "start_line": 26,
+      "end_line": 26,
+      "original_code": "os.system(f\"ping -c 1 {hostname}\")",
+      "patched_code": "subprocess.run([\"ping\", \"-c\", \"1\", str(f\"ping -c 1 {hostname}\").split()[-1] if \" \" in str(f\"ping -c 1 {hostname}\") else str(f\"ping -c 1 {hostname}\")], check=False)",
+      "unified_diff": "--- a/app.py\n+++ b/app.py\n@@ -1 +1 @@\n-    os.system(f\"ping -c 1 {hostname}\")\n\n+    subprocess.run([\"ping\", \"-c\", \"1\", str(f\"ping -c 1 {hostname}\").split()[-1] if \" \" in str(f\"ping -c 1 {hostname}\") else str(f\"ping -c 1 {hostname}\")], check=False)\n",
+      "remediation_summary": "Automated remediation for OS Command Injection via Shell Execution (CWE-78)",
+      "applied": false
+    },
+    {
+      "vulnerability_id": "FG-004",
+      "file_path": "examples/vulnerable_app\\app.py",
+      "start_line": 30,
+      "end_line": 30,
+      "original_code": "session_data = pickle.loads(session_bytes)",
+      "patched_code": "session_data = json.loads(session_bytes.decode(\"utf-8\") if isinstance(session_bytes, (bytes, bytearray)) else session_bytes)",
+      "unified_diff": "--- a/app.py\n+++ b/app.py\n@@ -1 +1 @@\n-    session_data = pickle.loads(session_bytes)\n\n+    session_data = json.loads(session_bytes.decode(\"utf-8\") if isinstance(session_bytes, (bytes, bytearray)) else session_bytes)\n",
+      "remediation_summary": "Automated remediation for Insecure Object Deserialization (CWE-502)",
+      "applied": false
+    },
+    {
+      "vulnerability_id": "FG-005",
+      "file_path": "examples/vulnerable_app\\app.py",
+      "start_line": 35,
+      "end_line": 35,
+      "original_code": "return hashlib.md5(password.encode()).hexdigest()",
+      "patched_code": "return hashlib.sha256(password.encode()).hexdigest()",
+      "unified_diff": "--- a/app.py\n+++ b/app.py\n@@ -1 +1 @@\n-    return hashlib.md5(password.encode()).hexdigest()\n\n+    return hashlib.sha256(password.encode()).hexdigest()\n",
+      "remediation_summary": "Automated remediation for Weak Cryptographic Hash Algorithm (CWE-327)",
+      "applied": false
+    },
+    {
+      "vulnerability_id": "FG-006",
+      "file_path": "examples/vulnerable_app\\app.py",
+      "start_line": 39,
+      "end_line": 39,
+      "original_code": "token_int = random.randint(100000, 999999)",
+      "patched_code": "token_int = secrets.choice(range(100000, 999999 + 1))",
+      "unified_diff": "--- a/app.py\n+++ b/app.py\n@@ -1 +1 @@\n-    token_int = random.randint(100000, 999999)\n\n+    token_int = secrets.choice(range(100000, 999999 + 1))\n",
+      "remediation_summary": "Automated remediation for Cryptographically Insecure Pseudorandom Number Generator (CWE-338)",
+      "applied": false
+    },
+    {
+      "vulnerability_id": "FG-007",
+      "file_path": "examples/vulnerable_app\\app.py",
+      "start_line": 44,
+      "end_line": 44,
+      "original_code": "return eval(user_expression)",
+      "patched_code": "return eval(user_expression, {\"__builtins__\": None}, {})",
+      "unified_diff": "--- a/app.py\n+++ b/app.py\n@@ -1 +1 @@\n-    return eval(user_expression)\n\n+    return eval(user_expression, {\"__builtins__\": None}, {})\n",
+      "remediation_summary": "Automated remediation for Dynamic Code Evaluation via eval/exec (CWE-95)",
+      "applied": false
+    }
+  ]
+}
