@@ -3,12 +3,12 @@
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![YouTube Demo](https://img.shields.io/badge/YouTube-Demo%20Video-red.svg?logo=youtube)](https://youtu.be/9lGYcw7LdIM)
+[![YouTube Demo](https://img.shields.io/badge/YouTube-Demo%20Video-red.svg?logo=youtube)](https://youtu.be/QicTSnnBr9k)
 [![OWASP Top 10](https://img.shields.io/badge/OWASP-Top%2010%20Covered-red.svg)](https://owasp.org/www-project-top-ten/)
 [![STRIDE](https://img.shields.io/badge/Threat%20Modeling-STRIDE%20Automated-purple.svg)](https://en.wikipedia.org/wiki/STRIDE_(security))
 [![ForgeHacks 2026](https://img.shields.io/badge/ForgeHacks%202026-AI%20%2B%20Cybersecurity%20Track-orange.svg)](https://forgehacks.devpost.com)
 
-> 🎥 **Watch the 1-Minute Walkthrough Demo Video:** [https://youtu.be/9lGYcw7LdIM](https://youtu.be/9lGYcw7LdIM)
+> 🎥 **Watch the 3.5-Minute Full Demo Walkthrough:** [https://youtu.be/QicTSnnBr9k](https://youtu.be/QicTSnnBr9k)
 
 **ForgeGuard** is an enterprise-grade cybersecurity platform that unites **static abstract syntax tree (AST) vulnerability auditing**, **automated STRIDE threat modeling**, and **autonomous AST-verified code remediation** into a unified tri-agent AI system.
 
